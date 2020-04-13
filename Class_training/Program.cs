@@ -49,9 +49,9 @@ namespace Class_training
 
 		public override string ToString()
 		{
-			return string.Format("name -  ім'я" +
-				"surname -  прізвище" +
-				"bornDate - датa народження");
+			return string.Format($"{name} -  имя \n" +
+				$"{surname} -  фамилия \n" +
+				$"{bornDate} - датa народження \n");
 		}
 		public string ToShortString()
 		{
@@ -86,34 +86,59 @@ namespace Class_training
 
 		public override string ToString()
 		{
-			return string.Format("orgName - назвa організації, яка видала диплом (сертифікат)," +
-				" qualifications -  отриманa кваліфікація," +
-				" diplomeDateTime - датa видачі диплома ");
+			return string.Format($"{orgName} - назвa організації, яка видала диплом (сертифікат) \n" +
+				$"{qualifications} -  отриманa кваліфікація \n" +
+				$"{diplomeDateTime} - датa видачі диплома \n ");
 		}
 	}
 
-
-
 	class Doctor
 	{
-		private Person personalInformation { get; set; }
-
-		private string specifacation { get; set; }
-
-		private Category category { get; set; }
-
-		private int workTime { get; set; }
-
-		private Diploma aboutDiploma { get; set; }
+		private Person personalInformation;
+		private string specifacation;
+		private Category category;
+		private int workTime;
+		private Diploma[] aboutDiploma;
 
 
-		public Doctor(Person personalInformation, string specifacation, Category category, int workTime, Diploma aboutDiploma)
+		public Person PersonalInformation
+		{
+			get { return personalInformation; }
+			set { personalInformation = value; }
+		}
+
+		public string Specifacation
+		{
+			get { return specifacation; }
+			set { specifacation = value; }
+		}
+
+		public Category Category
+		{
+			get { return category; }
+			set { category = value; }
+		}
+		
+		public int WorkTime
+		{
+			get { return workTime; }
+			set { workTime = value; }
+		}
+
+		public Diploma[] AboutDiploma 
+		{
+			get { return aboutDiploma; }
+			set { aboutDiploma = value; }
+		}
+
+		
+		public Doctor(Person personalInformation, string specifacation, Category category, int workTime)
 		{
 			this.personalInformation = personalInformation;
 			this.specifacation = specifacation;
 			this.category = category;
 			this.workTime = workTime;
-			this.aboutDiploma = aboutDiploma;
+			aboutDiploma = new Diploma[0];
 		}
 
 		public Doctor()
@@ -122,42 +147,57 @@ namespace Class_training
 			specifacation = "default";
 			category = Category.High;
 			workTime = 99;
-			aboutDiploma = new Diploma();
+			aboutDiploma = new Diploma[0];
 		}
 
 
-		//public Diploma getFirstDiploma
-		//{
-		//	get
-		//	{
-		//		if (true)
-		//		{
+		public Diploma getFirstDiploma
+		{
+			get
+			{
+				System.DateTime firstDiplom = aboutDiploma[0].diplomeDateTime;
+				for (int i = 0; i < aboutDiploma.Length; i++)
+				{
+					firstDiplom = 
+				}
+				return firstDiplom;
+			}	
+		}
 
-		//		}
-		//	}	
-		//}
+		public void AddDiplomas(params Diploma[] aboutDiploma)
+		{
+			int len = this.aboutDiploma.Length + aboutDiploma.Length;
+			int oldLen = this.aboutDiploma.Length; 
 
-		//public void AddDiplomas(params Diploma[])
-		//{
+			Array.Resize(ref this.aboutDiploma, len);
 
-		//}
+			for (int i = 0; i < aboutDiploma.Length; i++)
+			{
+				this.aboutDiploma[oldLen + i] = aboutDiploma[i];
+			}
+		}
 
 		public override string ToString()
 		{
-			return string.Format("personalInformation - данні лікаря," +
-				"specifacation - спеціальність," +
-				"category - категорія лікаря," +
-				"workTime - стаж" +
-				"aboutDiploma - поля зі списком дипломів і сертифікатів");
+			for (int i = 0; i < aboutDiploma.Length /2; i++)
+			{
+				Console.WriteLine(aboutDiploma[i].ToString());
+			}
+			return string.Format($"{personalInformation} - данные врача \n" +
+				$"{specifacation} - специальность \n" +
+				$"{category} - категория врача \n" +
+				$"{workTime} - стаж \n");
 		}
 
 		public string ToShortString()
 		{
-			return personalInformation + " " + specifacation + " " + category + " " + workTime + " " + aboutDiploma;
+			return string.Format($"{personalInformation} - данные врача \n" +
+				$"{specifacation} - специальность \n" +
+				$"{category} - категория врача \n" +
+				$"{workTime} - стаж \n");
 		}
 
 	}
-
 
 
 
@@ -165,14 +205,19 @@ namespace Class_training
 	{
 		static void Main()
 		{
-			Diploma diplomaDefault = new Diploma();
-			Console.WriteLine(diplomaDefault.ToString());
+			Doctor doctor = new Doctor();
+			doctor.ToString();
 
-			diplomaDefault.orgName = "KNU";
-			diplomaDefault.qualifications = "magistr";
-			diplomaDefault.diplomeDateTime = DateTime.Today;
+			doctor.PersonalInformation = new Person("Kyrylo", "Rodin", new DateTime(20002, 08, 17));
+			doctor.Specifacation = "NoneDefault";
+			doctor.Category = Category.First;
+			doctor.WorkTime = 15;
+			doctor.AboutDiploma = new Diploma[0];
 
-			Doctor doctorSpec = new Doctor();
+			doctor.ToShortString();
+
+			Doctor doctor2 = new Doctor()
+
 		}
 	}
 
