@@ -219,7 +219,7 @@ namespace Class_training
 		static void Main()
 		{
 			Doctor doctor = new Doctor();
-			doctor.ToString();
+			Console.WriteLine(doctor.ToString());
 
 			doctor.PersonalInformation = new Person("Kyrylo", "Rodin", new DateTime(2002, 08, 17));
 			doctor.Specifacation = "NoneDefault";
@@ -250,26 +250,15 @@ namespace Class_training
 
 			Stopwatch stopWatch = new Stopwatch();
 
-			
+			// -----------------------------------------
 			Diploma[] array_1 = new Diploma[nrow * ncolumn];
-			Diploma[,] array_2 = new Diploma[nrow, ncolumn];
-			Diploma[][] array_3 = new Diploma[nrow][];
-			for (int i = 0; i < nrow; i++)
-			{
-				array_3[i] = new Diploma[ncolumn];
-				
-			}
-
-
-			stopWatch.Start();
 			for (int i = 0; i < nrow * ncolumn; i++)
 			{
 				array_1[i] = new Diploma();
 			}
-			Console.WriteLine("Времени потрачано (одномерный) (мс) : " + stopWatch.ElapsedMilliseconds);
-			long time = stopWatch.ElapsedMilliseconds;
 
-
+			// -----------------------------------------
+			Diploma[,] array_2 = new Diploma[nrow, ncolumn];
 			for (int i = 0; i < nrow; i++)
 			{
 				for (int j = 0; j < ncolumn; j++)
@@ -277,10 +266,14 @@ namespace Class_training
 					array_2[i, j] = new Diploma();
 				}
 			}
-			long nextTimeOperation = stopWatch.ElapsedMilliseconds - time;
-			Console.WriteLine("Времени потрачано (двумерный) (мс) : " + nextTimeOperation);
 
-
+			// -----------------------------------------
+			Diploma[][] array_3 = new Diploma[nrow][];
+			for (int i = 0; i < nrow; i++)
+			{
+				array_3[i] = new Diploma[ncolumn];
+				
+			}
 
 			for (int i = 0; i < nrow; i++)
 			{
@@ -289,8 +282,32 @@ namespace Class_training
 					array_3[i][j] = new Diploma();
 				}
 			}
-			Console.WriteLine("Времени потрачано (зубчастый) (мс) : " + nextTimeOperation);
 
+			stopWatch.Start();
+			for (int i = 0; i < nrow * ncolumn; i++)
+			{
+				array_1[i].orgName = "Changed";
+			}
+			Console.WriteLine("Времени потрачано (одномерный) (мс) : " + stopWatch.ElapsedMilliseconds);
+			long time = stopWatch.ElapsedMilliseconds;
+
+			for (int i = 0; i < nrow; i++)
+			{
+				for (int j = 0; j < ncolumn; j++)
+				{
+					array_2[i, j].orgName = "Changed";
+				}
+			}
+			long nextTimeOperation = stopWatch.ElapsedMilliseconds - time;
+			Console.WriteLine("Времени потрачано (двумерный) (мс) : " + nextTimeOperation);
+			for (int i = 0; i < nrow; i++)
+			{
+				for (int j = 0; j < ncolumn; j++)
+				{
+					array_3[i][j].orgName = "Chaged";
+				}
+			}
+			Console.WriteLine("Времени потрачано (зубчастый) (мс) : " + nextTimeOperation);
 		}
 	}
 
