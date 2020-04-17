@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Class_training
 {
@@ -8,6 +9,7 @@ namespace Class_training
 		private string name;
 		private string surname;
 		private System.DateTime bornDate;
+
 
 		public string Name
 		{
@@ -29,8 +31,12 @@ namespace Class_training
 
 		public int ChangeBornDate
 		{
-			get { return Convert.ToInt32(bornDate); }
-			set { bornDate = Convert.ToDateTime(value); }
+			get { return bornDate.Year; }
+			set
+			{
+				DateTime bornYear = new DateTime(value, bornDate.Month, bornDate.Day);
+				bornDate = bornYear; 
+			}
 		}
 
 		public Person (string name, string surname, System.DateTime bornDate)
@@ -53,7 +59,7 @@ namespace Class_training
 				$"{surname} -  фамилия \n" +
 				$"{bornDate} - датa народження \n");
 		}
-		public string ToShortString()
+		public virtual string ToShortString()
 		{
 			return name + " " + surname;
 		}
@@ -86,9 +92,9 @@ namespace Class_training
 
 		public override string ToString()
 		{
-			return string.Format($"{orgName} - назвa організації, яка видала диплом (сертифікат) \n" +
-				$"{qualifications} -  отриманa кваліфікація \n" +
-				$"{diplomeDateTime} - датa видачі диплома \n ");
+			return string.Format($"{orgName} - назвaние организации, которая видала диплом (сертификат) \n" +
+				$"{qualifications} -  полученая квалификация\n" +
+				$"{diplomeDateTime} - датa получения диплома \n ");
 		}
 	}
 
@@ -155,12 +161,23 @@ namespace Class_training
 		{
 			get
 			{
-				System.DateTime firstDiplom = aboutDiploma[0].diplomeDateTime;
-				for (int i = 0; i < aboutDiploma.Length; i++)
+				if (aboutDiploma == null)
 				{
-					firstDiplom = 
+					System.DateTime firstDiplom = aboutDiploma[0].diplomeDateTime;
+					int iMin = 0;
+					for (int i = 0; i < aboutDiploma.Length; i++)
+					{
+						if (firstDiplom > aboutDiploma[i].diplomeDateTime)
+						{
+							firstDiplom = aboutDiploma[i].diplomeDateTime;
+							iMin = i;
+						}
+					}
+					return aboutDiploma[iMin];
 				}
-				return firstDiplom;
+				else
+					return null;
+				
 			}	
 		}
 
@@ -179,10 +196,6 @@ namespace Class_training
 
 		public override string ToString()
 		{
-			for (int i = 0; i < aboutDiploma.Length /2; i++)
-			{
-				Console.WriteLine(aboutDiploma[i].ToString());
-			}
 			return string.Format($"{personalInformation} - данные врача \n" +
 				$"{specifacation} - специальность \n" +
 				$"{category} - категория врача \n" +
@@ -191,7 +204,7 @@ namespace Class_training
 
 		public string ToShortString()
 		{
-			return string.Format($"{personalInformation} - данные врача \n" +
+			return string.Format($"{personalInformation}\n" +
 				$"{specifacation} - специальность \n" +
 				$"{category} - категория врача \n" +
 				$"{workTime} - стаж \n");
@@ -208,15 +221,75 @@ namespace Class_training
 			Doctor doctor = new Doctor();
 			doctor.ToString();
 
-			doctor.PersonalInformation = new Person("Kyrylo", "Rodin", new DateTime(20002, 08, 17));
+			doctor.PersonalInformation = new Person("Kyrylo", "Rodin", new DateTime(2002, 08, 17));
 			doctor.Specifacation = "NoneDefault";
 			doctor.Category = Category.First;
 			doctor.WorkTime = 15;
 			doctor.AboutDiploma = new Diploma[0];
 
-			doctor.ToShortString();
+			Console.WriteLine(doctor.ToShortString()); 
 
-			Doctor doctor2 = new Doctor()
+			Doctor doctor2 = new Doctor(new Person(), "someSpec", Category.Second, 500);
+			Console.WriteLine(doctor2.ToString());
+
+			doctor2.AddDiplomas(new Diploma(), new Diploma("Univer", "Qvaul", new DateTime(2002, 2, 4)));
+			Console.WriteLine(doctor2.ToString());
+
+			Console.WriteLine(doctor2.getFirstDiploma);
+
+
+
+			
+			Console.WriteLine("Введите количество строк и столбцов через * ");
+			string temp = Console.ReadLine();
+
+			string[] number = temp.Split('*');
+
+			int nrow = int.Parse(number[0]);
+			int ncolumn = int.Parse(number[1]);
+
+			Stopwatch stopWatch = new Stopwatch();
+
+			
+			Diploma[] array_1 = new Diploma[nrow * ncolumn];
+			Diploma[,] array_2 = new Diploma[nrow, ncolumn];
+			Diploma[][] array_3 = new Diploma[nrow][];
+			for (int i = 0; i < nrow; i++)
+			{
+				array_3[i] = new Diploma[ncolumn];
+				
+			}
+
+
+			stopWatch.Start();
+			for (int i = 0; i < nrow * ncolumn; i++)
+			{
+				array_1[i] = new Diploma();
+			}
+			Console.WriteLine("Времени потрачано (одномерный) (мс) : " + stopWatch.ElapsedMilliseconds);
+			long time = stopWatch.ElapsedMilliseconds;
+
+
+			for (int i = 0; i < nrow; i++)
+			{
+				for (int j = 0; j < ncolumn; j++)
+				{
+					array_2[i, j] = new Diploma();
+				}
+			}
+			long nextTimeOperation = stopWatch.ElapsedMilliseconds - time;
+			Console.WriteLine("Времени потрачано (двумерный) (мс) : " + nextTimeOperation);
+
+
+
+			for (int i = 0; i < nrow; i++)
+			{
+				for (int j = 0; j < ncolumn; j++)
+				{
+					array_3[i][j] = new Diploma();
+				}
+			}
+			Console.WriteLine("Времени потрачано (зубчастый) (мс) : " + nextTimeOperation);
 
 		}
 	}
